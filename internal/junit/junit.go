@@ -46,8 +46,21 @@ func (x *TestSuite) setSkipped(i int)  { x.Skipped = i }
 type TestCase struct {
 	XMLName xml.Name `xml:"testcase"`
 	Name    string   `xml:"name,attr"`
-	Status  string   `xml:"status,attr"`
+	Status  string   `xml:"status,attr,omitempty"`
 	Time    string   `xml:"time,attr"`
+	Failure *Failure `xml:"failure,omitempty"`
+	Skipped *Skipped `xml:"skipped,omitempty"`
+}
+
+type Failure struct {
+	XMLName xml.Name `xml:"failure"`
+	Type    string   `xml:"type,attr"`
+	Message string   `xml:"message,attr"`
+	Value   string   `xml:",cdata"`
+}
+
+type Skipped struct {
+	XMLName xml.Name `xml:"skipped"`
 }
 
 type stats interface {

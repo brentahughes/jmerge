@@ -30,6 +30,7 @@ func main() {
 	handleErr(err)
 
 	fmt.Fprintln(os.Stdout, string(mergedXML))
+
 }
 
 func handleErr(err error) {
