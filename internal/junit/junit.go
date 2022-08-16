@@ -29,7 +29,7 @@ type TestSuite struct {
 	Errors    int        `xml:"errors,attr"`
 	Tests     int        `xml:"tests,attr"`
 	Skipped   int        `xml:"skipped,attr"`
-	Time      string     `xml:"time,attr"`
+	Time      *string    `xml:"time,attr,omitempty"`
 	TestCases []TestCase `xml:"testcase"`
 }
 
@@ -44,12 +44,13 @@ func (x *TestSuite) setSkipped(i int)  { x.Skipped = i }
 
 // TestCase represents the xml used for a testcase in a junit report.
 type TestCase struct {
-	XMLName xml.Name `xml:"testcase"`
-	Name    string   `xml:"name,attr"`
-	Status  string   `xml:"status,attr,omitempty"`
-	Time    string   `xml:"time,attr"`
-	Failure *Failure `xml:"failure,omitempty"`
-	Skipped *Skipped `xml:"skipped,omitempty"`
+	XMLName   xml.Name `xml:"testcase"`
+	ClassName string   `xml:"classname,attr,omitempty"`
+	Name      string   `xml:"name,attr"`
+	Status    string   `xml:"status,attr,omitempty"`
+	Time      string   `xml:"time,attr"`
+	Failure   *Failure `xml:"failure,omitempty"`
+	Skipped   *Skipped `xml:"skipped,omitempty"`
 }
 
 type Failure struct {
