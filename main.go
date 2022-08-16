@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/xml"
 	"errors"
 	"fmt"
@@ -29,8 +30,11 @@ func main() {
 	mergedXML, err := xml.MarshalIndent(merged, "", "  ")
 	handleErr(err)
 
-	fmt.Fprintln(os.Stdout, string(mergedXML))
+	// CDATA is output with extra lines that shouldn't be there. remove these
+	mergedXML = bytes.ReplaceAll(mergedXML, []byte("CDATA[\n            "), []byte("CDATA["))
+	mergedXML = bytes.ReplaceAll(mergedXML, []byte("\n      ]]>"), []byte("]]>"))
 
+	fmt.Fprintln(os.Stdout, string(mergedXML))
 }
 
 func handleErr(err error) {
