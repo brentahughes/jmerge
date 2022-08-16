@@ -2,6 +2,7 @@ package junit
 
 import (
 	"fmt"
+	"sort"
 	"time"
 )
 
@@ -41,6 +42,32 @@ func (d *XML) merge(source *XML) {
 		} else {
 			d.TestSuites[index] = existing
 		}
+	}
+
+	// Check all testcases and increment duplicate names
+	for i, s := range d.TestSuites {
+		sort.Slice(s.TestCases, func(a, b int) bool {
+			return !sort.StringsAreSorted([]string{s.TestCases[a].Name, s.TestCases[b].Name})
+		})
+
+		var last string
+		count := 1
+		for j, c := range s.TestCases {
+			if c.Name != last {
+				last = c.Name
+				count = 1
+
+				continue
+			}
+
+			last = c.Name
+			count++
+
+			c.Name += fmt.Sprintf(" %d", count)
+			s.TestCases[j] = c
+		}
+
+		d.TestSuites[i] = s
 	}
 }
 
