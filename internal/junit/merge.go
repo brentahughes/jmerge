@@ -19,11 +19,8 @@ func (d *XML) merge(source *XML) {
 
 	for _, testSuite := range source.TestSuites {
 		index, existing := d.getTestSuiteByName(testSuite.Name)
-		if index < 0 {
-			existing = &TestSuite{}
-		}
 
-		mergeStats(existing, &testSuite)
+		mergeStats(&existing, &testSuite)
 
 		existing.TestCases = append(existing.TestCases, testSuite.TestCases...)
 		for i, testCase := range existing.TestCases {
@@ -37,21 +34,23 @@ func (d *XML) merge(source *XML) {
 		existing.Time = fmt.Sprintf("%f", (existingTime + suiteTime).Seconds())
 
 		if index < 0 {
-			d.TestSuites = append(d.TestSuites, *existing)
+			d.TestSuites = append(d.TestSuites, existing)
 		} else {
-			d.TestSuites[index] = *existing
+			d.TestSuites[index] = existing
 		}
 	}
 }
 
-func (d *XML) getTestSuiteByName(name string) (int, *TestSuite) {
+func (d *XML) getTestSuiteByName(name string) (int, TestSuite) {
 	for i, suite := range d.TestSuites {
 		if suite.Name == name {
-			return i, &suite
+			return i, suite
 		}
 	}
 
-	return -1, nil
+	return -1, TestSuite{
+		Name: name,
+	}
 }
 
 func convertDuration(dur string) time.Duration {
