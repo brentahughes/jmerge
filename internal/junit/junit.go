@@ -9,6 +9,7 @@ type XML struct {
 	Errors     int         `xml:"errors,attr"`
 	Tests      int         `xml:"tests,attr"`
 	Skipped    int         `xml:"skipped,attr"`
+	Skip       int         `xml:"skip,attr,omitempty"`
 	TestSuites []TestSuite `xml:"testsuite"`
 }
 
@@ -18,8 +19,11 @@ func (x *XML) getErrors() int    { return x.Errors }
 func (x *XML) setErrors(i int)   { x.Errors = i }
 func (x *XML) getTests() int     { return x.Tests }
 func (x *XML) setTests(i int)    { x.Tests = i }
-func (x *XML) getSkipped() int   { return x.Skipped }
-func (x *XML) setSkipped(i int)  { x.Skipped = i }
+func (x *XML) getSkipped() int   { return x.Skipped + x.Skip }
+func (x *XML) setSkipped(i int) {
+	x.Skipped = i
+	x.Skip = 0
+}
 
 // TestSuite represents the xml used for a testsuite in a junit report.
 type TestSuite struct {
@@ -29,6 +33,7 @@ type TestSuite struct {
 	Errors    int        `xml:"errors,attr"`
 	Tests     int        `xml:"tests,attr"`
 	Skipped   int        `xml:"skipped,attr"`
+	Skip      int        `xml:"skip,attr,omitempty"`
 	Time      *string    `xml:"time,attr,omitempty"`
 	TestCases []TestCase `xml:"testcase"`
 }
@@ -39,8 +44,11 @@ func (x *TestSuite) getErrors() int    { return x.Errors }
 func (x *TestSuite) setErrors(i int)   { x.Errors = i }
 func (x *TestSuite) getTests() int     { return x.Tests }
 func (x *TestSuite) setTests(i int)    { x.Tests = i }
-func (x *TestSuite) getSkipped() int   { return x.Skipped }
-func (x *TestSuite) setSkipped(i int)  { x.Skipped = i }
+func (x *TestSuite) getSkipped() int   { return x.Skipped + x.Skip }
+func (x *TestSuite) setSkipped(i int) {
+	x.Skipped = i
+	x.Skip = 0
+}
 
 // TestCase represents the xml used for a testcase in a junit report.
 type TestCase struct {
