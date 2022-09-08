@@ -25,14 +25,14 @@ func (d *XML) merge(source *XML) {
 		existing.TestCases = append(existing.TestCases, testSuite.TestCases...)
 		for i, testCase := range existing.TestCases {
 			caseTime := convertDuration(testCase.Time)
-			testCase.Time = fmt.Sprintf("%.2f", caseTime.Seconds())
+			testCase.Time = fmt.Sprintf("%.2fs", caseTime.Seconds())
 			existing.TestCases[i] = testCase
 		}
 
 		if testSuite.Time != nil && existing.Time != nil {
 			suiteTime := convertDuration(*testSuite.Time)
 			existingTime := convertDuration(*existing.Time)
-			t := fmt.Sprintf("%.2f", (existingTime + suiteTime).Seconds())
+			t := fmt.Sprintf("%.2fs", (existingTime + suiteTime).Seconds())
 			existing.Time = &t
 		}
 
